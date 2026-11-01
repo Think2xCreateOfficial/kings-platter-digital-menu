@@ -1,3 +1,4 @@
+import React from 'react';
 import { Crown, Star, Utensils } from 'lucide-react';
 import { SafeImage } from '../common/SafeImage';
 
@@ -5,27 +6,53 @@ interface HeroFoodBannerProps {
   onExploreClick?: () => void;
 }
 
+const HERO_BG_IMAGES = [
+  '/hero-biryani-handi-hd.jpg',
+  '/hero-roast-chicken-hd.jpg',
+  '/hero-strawberry-shake-hd.jpg',
+  '/hero-falooda-sundae-hd.jpg',
+  '/hero-crispy-burger-hd.jpg',
+];
+
 export function HeroFoodBanner({ onExploreClick }: HeroFoodBannerProps) {
+  const [activeIndex, setActiveIndex] = React.useState(0);
+
+  React.useEffect(() => {
+    const id = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % HERO_BG_IMAGES.length);
+    }, 2000);
+    return () => clearInterval(id);
+  }, []);
+
   return (
     <section
       aria-label="Featured culinary showcase"
       className="relative w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-[#121215] border border-[#26262E] shadow-2xl mb-6 sm:mb-8"
     >
-      {/* Background with delicious hero food imagery from King's Platter style */}
-      <div className="absolute inset-0 z-0">
-        <SafeImage
-          src="/kongu-mutton-biriyani.jpg"
-          alt="King's Platter signature Kongu Mutton Biriyani"
-          className="w-full h-full object-cover object-center scale-105 filter brightness-75 contrast-110"
-          loading="eager"
-        />
+      {/* Background slideshow - auto-rotates every 2 seconds, HD 1600px images */}
+      <div className="absolute inset-0 z-0" aria-hidden="true">
+        {HERO_BG_IMAGES.map((src, idx) => (
+          <SafeImage
+            key={src}
+            src={src}
+            alt=""
+            aria-hidden="true"
+            className={`absolute inset-0 w-full h-full object-cover object-center [image-rendering:auto] filter brightness-[0.82] contrast-110 saturate-110 transition-opacity duration-[1500ms] ease-in-out will-change-opacity ${
+              idx === activeIndex ? 'opacity-100' : 'opacity-0'
+            }`}
+            loading="eager"
+            fetchPriority={idx === 0 ? 'high' : 'auto'}
+            decoding="async"
+            draggable={false}
+          />
+        ))}
         {/* Cinematic dark gradients */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#0C0C0E] via-[#0C0C0E]/85 to-transparent sm:w-2/3" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0C0C0E] via-transparent to-black/30" />
       </div>
 
       {/* Content overlay */}
-      <div className="relative z-10 px-4 py-5 sm:px-8 sm:py-8 lg:px-10 lg:py-10 max-w-2xl flex flex-col items-start justify-center">
+      <div className="relative z-10 px-4 py-5 sm:px-8 sm:py-8 lg:px-10 lg:py-10 max-w-2xl flex flex-col items-start justify-center min-h-[220px] sm:min-h-[260px]">
         {/* Royal badge */}
         <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#E5A93C]/15 border border-[#E5A93C]/30 text-[#F5C368] text-[11px] font-semibold tracking-wider uppercase mb-2 sm:mb-3 backdrop-blur-sm">
           <Crown className="w-3 h-3 text-[#E5A93C] fill-[#E5A93C]" />
@@ -68,6 +95,23 @@ export function HeroFoodBanner({ onExploreClick }: HeroFoodBannerProps) {
               Browse All Categories ↓
             </button>
           )}
+        </div>
+
+        {/* Auto-slide dots */}
+        <div className="flex items-center gap-1.5 mt-4" role="tablist" aria-label="Hero slides">
+          {HERO_BG_IMAGES.map((src, idx) => (
+            <button
+              key={src}
+              type="button"
+              role="tab"
+              aria-selected={idx === activeIndex}
+              aria-label={`Go to slide ${idx + 1}`}
+              onClick={() => setActiveIndex(idx)}
+              className={`h-1.5 rounded-full transition-all duration-500 cursor-pointer ${
+                idx === activeIndex ? 'w-6 bg-[#E5A93C]' : 'w-1.5 bg-white/30 hover:bg-white/50'
+              }`}
+            />
+          ))}
         </div>
       </div>
     </section>

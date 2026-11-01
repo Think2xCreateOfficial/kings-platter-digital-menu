@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Plus_Jakarta_Sans } from 'next/font/google';
+import { AnalyticsConsentBanner } from '@/components/common/AnalyticsConsentBanner';
 import '../index.css';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -79,6 +80,7 @@ export default function RootLayout({
       </head>
       <body className="bg-[#0D0D10] text-[#E8E8ED] antialiased font-sans">
         {children}
+        <AnalyticsConsentBanner />
       </body>
     </html>
   );

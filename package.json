@@ -9,6 +9,7 @@
     "start": "next start",
     "lint": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
+    "replay:check": "node --import tsx --test posthog-replay.check.mjs",
     "menu:validate": "tsx scripts/import-pdf-menu.ts --validate",
     "menu:import": "tsx scripts/import-pdf-menu.ts --import"
   },
@@ -22,6 +23,7 @@
     "motion": "^12.23.24",
     "next": "^16.3.5",
     "postcss": "^8.5.28",
+    "posthog-js": "1.438.13",
     "react": "^19.0.1",
     "react-dom": "^19.0.1",
     "sharp": "^0.35.4",
@@ -42,4 +44,3 @@
     "typescript": "~5.8.2"
   }
 }
-
